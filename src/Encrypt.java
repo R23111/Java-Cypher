@@ -1,11 +1,13 @@
 public final class Encrypt {
     public static String encrypt(String text, int seed) {
+        seed %= 33;
         String[] binaryList = wordToBinaryString(text, true);
         String[] newBinaryList = moveBinaryListLeftBy(seed, binaryList);
         return binaryToWord(newBinaryList);
     }
 
     public static String decrypt(String text, int seed) {
+        seed %= 33;
         String[] binaryList = wordToBinaryString(text, false);
         String[] newBinaryList = moveBinaryListRightBy(seed, binaryList, true);
         return binaryToWord(newBinaryList);
