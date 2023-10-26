@@ -5,29 +5,26 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-
         Random rn = new Random();
-
-        System.out.println("Encrypt (1) or decrypt (2)?");
-        int option;
-        do {
-            option = scanner.nextInt();
-        } while (option != 1 && option != 2);
-
-        if (option == 1) {
-            System.out.print("Text to encrypt: ");
-            scanner.nextLine();
-            String text = scanner.nextLine();
-            int seed = Math.abs(rn.nextInt());
-            System.out.println("Encrypted text: " + Encrypt.encrypt(text, seed) + " \n\nseed: " + seed);
-        } else {
-            System.out.println("Text to decrypt: ");
-            scanner.nextLine();
-            String text = scanner.nextLine();
-            System.out.println("\nSeed: ");
-            int seed = scanner.nextInt();
-            System.out.println("Decrypted text: " + Encrypt.decrypt(text, seed));
+        int seed = Math.abs(rn.nextInt());
+        for (int i = 0; i < 3; i++) {
+            System.out.print("Digite a linha número " + (i + 1) + ": ");
+            String line = scanner.nextLine();
+            String encryptedLine = Encrypt.encrypt(line, seed);
+            System.out.println("Linha encriptada: " + encryptedLine);
         }
+
+        while (true) {
+            System.out.print("Deseja uma dica? (y/n): ");
+            String option = scanner.nextLine();
+            if (option.equalsIgnoreCase("y")) {
+                System.out.println("Seed da cifra: " + seed);
+                break;
+            }
+            if (option.equalsIgnoreCase("n")) {
+                break;
+            }
+        }
+        System.out.println("Perguntas:\n1- Como a cifra influencia na criptografia?\n2- Existe alguma semelhança com a cifra de Caesar?\n3- A cifra aceita qualquer caracter?");
     }
 }

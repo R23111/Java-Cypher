@@ -1,9 +1,18 @@
 public final class Encrypt {
     public static String encrypt(String text, int seed) {
-        seed %= 33;
-        String[] binaryList = wordToBinaryString(text, true);
-        String[] newBinaryList = moveBinaryListLeftBy(seed, binaryList);
-        return binaryToWord(newBinaryList);
+        /*
+        * Passoa  passo da cifra:
+        * 1° passo: Pega o caracter e transforma ele em um número
+        * 2° passo: Transforma o número em seu respectivo binário
+        * 3° passo: inverte o binário
+        * 4° passo: move o binário circularmente para a esquerda pelo número da cifra
+        * 5° passo: Transforma o binário em um número
+        * 6° passo: Transforma o número em seu respectivo caractere
+        * */
+        seed %= 33; // o número binário possui 5 bits, então ele se repete ao 33° caractere
+        String[] binaryList = wordToBinaryString(text, true); // passo 1 ao 3
+        String[] newBinaryList = moveBinaryListLeftBy(seed, binaryList); // passo 4
+        return binaryToWord(newBinaryList); // passo 5
     }
 
     public static String decrypt(String text, int seed) {
@@ -20,14 +29,17 @@ public final class Encrypt {
             int charNum;
             charNum = charToNumber(word.charAt(i));
             binary[i] = "";
+            // transforma número em binário
             while (charNum > 0 || binary[i].length() < 5) {
                 if (charNum != 0) {
                     binary[i] = binary[i].concat(charNum % 2 == 0 ? "0" : "1");
                     charNum /= 2;
                 } else {
+                    // caso o número binário possua zeros a esquerda omitidos, eles são adicionados
                     binary[i] = binary[i].concat("0");
                 }
             }
+            // po binário está espelhado, então devemos "desespelhar" aqui
             StringBuilder temp = new StringBuilder();
             for (int j = binary[i].length() - 1; j >= 0; j--) {
                 temp.append(binary[i].charAt(j));
@@ -98,6 +110,8 @@ public final class Encrypt {
         return binaryList;
     }
     private static String moveBinaryLeftBy(int n, String binary) {
+        // n -> contador de  vezes para se fazer a movimentação
+        // se n for 0, então já foram feitas todas.
         if (n == 0) {
             return binary;
         }
@@ -105,8 +119,10 @@ public final class Encrypt {
         StringBuilder temp = new StringBuilder();
         int size = binary.length();
         for (int i = 0; i < size; i++) {
+            // o valor do na posição n é substituido pela posição n+1. se n é o último, ele é substituido o de posição 0
             temp.append(binary.charAt((i + 1) % size));
         }
+        // recursivamente, faz o mesmo processo
         return moveBinaryLeftBy(n - 1, temp.toString());
     }
 
@@ -192,6 +208,7 @@ public final class Encrypt {
     }
 
     private static String invertBinary(String binary) {
+        // transforma 1 em 0; e 0 em 1
         StringBuilder invertedBinary = new StringBuilder();
         for (int i = 0; i < binary.length(); i++) {
             invertedBinary.append(binary.charAt(i) == '1' ? '0' : '1');
